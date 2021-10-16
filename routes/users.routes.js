@@ -1,7 +1,8 @@
 const { Router } = require('express')
-const { body, check, query, param } = require('express-validator')
+const { body, check, param } = require('express-validator')
 
-const { userValidator } = require('../middlewares/userValidator')
+const { tokenValidator, userValidator } = require('../middlewares')
+
 const {
   roleValidator,
   emailValidator,
@@ -20,9 +21,11 @@ const router = Router()
 
 // user
 router.get('/', getUsers)
+
 router.put(
   '/:id',
   [
+    tokenValidator,
     check('id', 'Is not ID allowed').isMongoId(),
     check('id').custom(idValidator),
     body('role', 'Role is missing').notEmpty(),
@@ -31,6 +34,7 @@ router.put(
   ],
   putUsers
 )
+
 router.post(
   '/',
   [
@@ -44,10 +48,17 @@ router.post(
   ],
   postUsers
 )
+
 router.patch('/', patchUsers)
+
 router.delete(
   '/:id',
-  [param('id').isMongoId(), param('id').custom(idValidator), userValidator],
+  [
+    tokenValidator,
+    param('id').isMongoId(),
+    param('id').custom(idValidator),
+    userValidator,
+  ],
   deleteUsers
 )
 
