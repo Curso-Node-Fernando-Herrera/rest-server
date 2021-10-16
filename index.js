@@ -17,6 +17,7 @@ app.use(express.static('public'))
 app.use(express.json())
 
 // routers
+app.use('/auth', require('./routes/auths.routes'))
 app.use('/api/users', require('./routes/users.routes'))
 
 app.listen(port, () => {
