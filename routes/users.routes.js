@@ -1,4 +1,13 @@
 const { Router } = require('express')
+const { body, check, query, param } = require('express-validator')
+
+const { userValidator } = require('../middlewares/userValidator')
+const {
+  roleValidator,
+  emailValidator,
+  idValidator,
+} = require('../validators/userValidator')
+
 const {
   getUsers,
   putUsers,
@@ -11,9 +20,35 @@ const router = Router()
 
 // user
 router.get('/', getUsers)
-router.put('/', putUsers)
-router.post('/', postUsers)
+router.put(
+  '/:id',
+  [
+    check('id', 'Is not ID allowed').isMongoId(),
+    check('id').custom(idValidator),
+    body('role', 'Role is missing').notEmpty(),
+    body('role').custom(roleValidator),
+    userValidator,
+  ],
+  putUsers
+)
+router.post(
+  '/',
+  [
+    body('displayName', 'Name is required').notEmpty(),
+    body('email', 'Most be a email').isEmail(),
+    body('email').custom(emailValidator),
+    body('password', 'Is required had more 6 letters').isLength({ min: 6 }),
+    body('password', 'Must be a strong password').isStrongPassword(),
+    body('role').custom(roleValidator),
+    userValidator,
+  ],
+  postUsers
+)
 router.patch('/', patchUsers)
-router.delete('/', deleteUsers)
+router.delete(
+  '/:id',
+  [param('id').isMongoId(), param('id').custom(idValidator), userValidator],
+  deleteUsers
+)
 
 module.exports = router
