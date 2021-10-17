@@ -33,7 +33,11 @@
       function handleCredentialResponse(response) {
         const tokenId = response.credential
 
-        fetch('http://localhost:8080/auth/google', {
+        const hostUrlLocation = window.location.hostname.includes('localhost')
+          ? 'http://localhost:8080/auth/google'
+          : 'https://rest-server-madeval.herokuapp.com/auth/google'
+
+        fetch(hostUrlLocation, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
