@@ -19,6 +19,8 @@ app.use(express.json())
 // routers
 app.use('/auth', require('./routes/auths.routes'))
 app.use('/api/users', require('./routes/users.routes'))
+app.use('/api/categories', require('./routes/categories.routes'))
+app.use('/api/products', require('./routes/products.routes'))
 
 app.listen(port, () => {
   console.log(`Connecting for http://localhost:${port}`)
