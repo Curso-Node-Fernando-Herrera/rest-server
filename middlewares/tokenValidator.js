@@ -13,7 +13,7 @@ const tokenValidator = async (req, res, next) => {
   try {
     const { id: uid } = jwt.verify(token, process.env.JWT_KEY)
     const userFound = await User.findById(uid)
-    console.log(userFound)
+
     if (!userFound) {
       return res.status(401).json({
         error: 'User not exist in database',
@@ -26,6 +26,7 @@ const tokenValidator = async (req, res, next) => {
       })
     }
 
+    req.uid = uid
     next()
   } catch (error) {
     console.error(error)
