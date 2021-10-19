@@ -69,7 +69,7 @@ const googleSignIn = async (req, res) => {
     }
 
     const token = await jwtGenerator({ uid: user.id })
-    console.log(token)
+
     res.json({
       user: user,
       token,
