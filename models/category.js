@@ -16,6 +16,9 @@ const CategorySchema = Schema({
     ref: 'User',
     required: [true, 'need user to approve create a category'],
   },
+  image: {
+    type: String,
+  },
 })
 
 CategorySchema.methods.toJSON = function () {
